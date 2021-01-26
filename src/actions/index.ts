@@ -1,11 +1,16 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
-import { ActionTypes } from './typestypes';
+import { ActionTypes } from './types';
 
-interface Todo {
+export interface Todo {
   id: number;
   title: string;
   completed: boolean;
+}
+
+export interface FetchTodosAction {
+  type: ActionTypes.fetchTodos;
+  payload: Todo[];
 }
 
 const url = 'https://jsonplaceholder.typicode.com/todos';
@@ -14,7 +19,9 @@ export const fetchTodos = () => {
   return async (dispatch: Dispatch) => {
     const response = await axios.get<Todo[]>(url);
 
-    dispatch({
+    // FetchTodosAction makes sure I am always passing
+    // in an object with the correct types and properties
+    dispatch<FetchTodosAction>({
       type: ActionTypes.fetchTodos,
       payload: response.data,
     });
